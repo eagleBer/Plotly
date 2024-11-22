@@ -1,19 +1,12 @@
-from dash import Dash, html, dcc
-import plotly.express as px
+import dash
+import dash_html_components as html
 
-app = Dash(__name__)
+# Création de l'application Dash
+app = dash.Dash(__name__)
 
-# Exemple d'une figure Plotly
-fig = px.scatter(
-    x=[1, 2, 3, 4],
-    y=[10, 11, 12, 13],
-    labels={'x': 'X-Axis', 'y': 'Y-Axis'}
-)
+# Définition de la mise en page de l'application
+app.layout = html.Div("Hello, world!")
 
-app.layout = html.Div([
-    html.H1("Hello Dash!"),
-    dcc.Graph(figure=fig)
-])
-
-if __name__ == '__main__':
+# Point d'entrée de l'application
+if __name__ == "__main__":
     app.run_server(debug=True)
