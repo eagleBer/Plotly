@@ -1,49 +1,47 @@
 import dash
 from dash import html, dcc
 from dash.dependencies import Input, Output
+import pandas as pd
+import plotly.express as px
 
 app = dash.Dash(__name__)
 server = app.server
 
 app.title = 'Kraftmessdatenauswerteprogramm'
-app.layout = html.Div([
-    html.Div([
-        dcc.Input(id='lines-header-prim', type='number', value=11),
-        dcc.Input(id='columns-read-prim', type='text', value='0,1'),
-        dcc.Input(id='line-title', type='number', value=3),
-        dcc.Input(id='lines-header-sec', type='number', value=11),
-        dcc.Input(id='columns-read-sec', type='text', value='0,1,2'),
-        html.Button('Neuer Plot', id='button-1', n_clicks=0),
-        html.Button('2. Plot', id='button-2', n_clicks=0),
-        html.Button('clear', id='button-3', n_clicks=0),
-        html.Button('Dateivorschau', id='button-4', n_clicks=0),
-        dcc.Checklist(id='separator-var',
-                      options=[{'label': 'Semikolon', 'value': ';'}], value=[';']),
-        dcc.RadioItems(id='max-var', options=[{'label': 'Messdaten', 'value': 0},
-                                              {'label': 'mit Maxima', 'value': 1},
-                                              {'label': 'nur Maxima', 'value': 2}], value=0),
-        dcc.Checklist(
-            id='time-var', options=[{'label': 'Anzeige nach Uhrzeit', 'value': 1}], value=[0]),
-        dcc.Checklist(
-            id='point-var', options=[{'label': 'Mit Datenpunkten', 'value': 1}], value=[0]),
-        html.Div(id='output')
-    ]),
-    html.Div([
-        dcc.Graph(id='plot-1'),
-        dcc.Graph(id='plot-2')
+# Exemple : Charger ou recevoir des données
+def load_data():
+    # Exemple de dataframe
+    data = pd.DataFrame({
+        "Category": ["A", "B", "C", "D"],
+        "Values": [10, 20, 30, 40]
+    })
+    return data
+
+# Créer un layout avec Dash
+def create_layout(data):
+    fig = px.bar(data, x="Category", y="Values", title="Graphique Exemple")
+    return html.Div([
+        html.H1("Visualisation avec Dash"),
+        dcc.Graph(figure=fig),
+        html.Button("Exporter les données", id="export-button"),
+        html.Div(id="export-status")
     ])
-])
 
+# Callback pour exporter les données
+@app.callback(
+    Output("export-status", "children"),
+    [Input("export-button", "n_clicks")]
+)
+def export_data(n_clicks):
+    if n_clicks:
+        data = load_data()
+        data.to_csv("data/exported_data.csv", index=False)
+        return "Les données ont été exportées !"
+    return ""
 
-@app.callback(Output('output', 'children'),
-              [Input('button-1', 'n_clicks'),
-               Input('button-2', 'n_clicks'),
-               Input('button-3', 'n_clicks'),
-               Input('button-4', 'n_clicks')])
-def update_output(btn1, btn2, btn3, btn4):
-    # Code to update the output based on button clicks
-    pass
-
+# Charger les données et initialiser le layout
+data = load_data()
+app.layout = create_layout(data)
 
 if __name__ == '__main__':
     app.run_server(debug=True)
