@@ -36,6 +36,8 @@ def main():
     df_nach_Charge_join = pd.merge(df_nach_Charge_kl, df_nach_Charge_sp, on=['Dioden-ID'], how='outer', suffixes=('_sp', '_kl'))
     df_nach_Charge_join = df_nach_Charge_join.iloc[:, np.lexsort((df_nach_Charge_join.columns.str.endswith('_sp'), ))]
 #df_nach_Charge_join= df_nach_Charge_join.isnull()
+    subprocess.Popen(["python", "dash_graphs.py"])
+    print("Now you known")
 
 
 if __name__ == "__main__":

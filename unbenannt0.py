@@ -1,13 +1,18 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Nov 22 16:06:51 2024
+
+@author: danmop
+"""
+
 import dash
-from dash import html, dcc
+from dash import dcc, html
 from dash.dependencies import Input, Output
-import pandas as pd
 import plotly.express as px
+import pandas as pd
 
+# Initialiser l'application Dash
 app = dash.Dash(__name__)
-server = app.server
-
-app.title = 'Kraftmessdatenauswerteprogramm'
 
 # Exemple : Charger ou recevoir des données
 def load_data():
@@ -33,8 +38,6 @@ def create_layout(data):
     Output("export-status", "children"),
     [Input("export-button", "n_clicks")]
 )
-
-
 def export_data(n_clicks):
     if n_clicks:
         data = load_data()
@@ -46,6 +49,5 @@ def export_data(n_clicks):
 data = load_data()
 app.layout = create_layout(data)
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run_server(debug=True)
