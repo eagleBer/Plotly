@@ -12,13 +12,6 @@ app.layout = [
     dcc.Graph(id='graph-content')
 ]
 
-@callback(
-    Output('graph-content', 'figure'),
-    Input('dropdown-selection', 'value')
-)
-def update_graph(value):
-    dff = df[df.country==value]
-    return px.line(dff, x='year', y='pop')
 
 if __name__ == '__main__':
     app.run(debug=True)
