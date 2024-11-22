@@ -9,7 +9,7 @@ import pyodbc    # for the database query
 import pandas    # for dataframes
 import re
 import math
-import matplotlib.pyplot
+#import matplotlib.pyplot
 from sqlalchemy import create_engine
 #from sqlalchemy.orm import sessionmaker
 
@@ -2146,84 +2146,3 @@ def kurtosis(iterable):
         return s
     except:
         return ""
-
-#------------------------------------------------------------------------------
-#------------------------------------------------------------------------------
-
-def analyze_column(column, hist = False, label = ""):
-    """
-    Calculates various statistical functions of the given value and gives them 
-    back in a pandas dataframe. 
-    
-    If hist is True, a histogram will be shown. 
-    """
-    
-    # names of the indexes
-    index = ["Minimum", "Maximum", "arithmetisches Mittel", "Standardabweichung", 
-             "Schiefe", "Woelbung", "Median", "unteres Quantil", "oberes Quantil", 
-             "Modus", "Gesamtzahl"]
-    
-    column = column.tolist()
-    column.sort()
-    
-    # calculating the statistical functions 
-    data = [min(column), max(column), amean(column), stdev(column), 
-            skewness(column), kurtosis(column), percentile(column, .5), 
-            percentile(column, .25), percentile(column, .75), mode(column), 
-            len(column)]
-    
-    # generate histogram
-    if hist: 
-        return (histogram(column, label), pandas.Series(data, index = index))
-    
-    # return table
-    return pandas.Series(data, index = index)
-
-#------------------------------------------------------------------------------
-#------------------------------------------------------------------------------
-
-def histogram(iterable, label):
-    """
-    Generates and shows a histogram of the given iterable. 
-    """
-    matplotlib.pyplot.figure(figsize = (6, 4), dpi = 72)
-    matplotlib.pyplot.subplot(211)
-    matplotlib.pyplot.title(label)
-    matplotlib.pyplot.ylabel("Anzahl")
-    _ = matplotlib.pyplot.hist(iterable, bins = "auto")
-    try:
-        matplotlib.pyplot.subplot(212)
-        matplotlib.pyplot.boxplot(iterable, vert = False, showmeans = True)
-        matplotlib.pyplot.text(iterable[0], 1.37, "Median", {"color": "y"})
-        matplotlib.pyplot.text(iterable[0], 1.27, "arithmetisches Mittel", {"color": "g"})
-    except:
-        pass
-    matplotlib.pyplot.savefig("plot.png")
-    matplotlib.pyplot.cla()
-    matplotlib.pyplot.clf()
-    return "plot.png"
-
-#------------------------------------------------------------------------------
-#------------------------------------------------------------------------------
-
-def xy_diagram(x_axis, y_axis, label, x_label, y_label, x_range, y_range):
-    """
-    Plots 2-dimensional datapoints. 
-    """
-    matplotlib.pyplot.figure(figsize = (6, 4), dpi = 72)
-    matplotlib.pyplot.title(label)
-    matplotlib.pyplot.xlabel(x_label)
-    matplotlib.pyplot.ylabel(y_label)
-    if not x_range == None:
-        matplotlib.pyplot.gca().set_xlim([x_range[0], x_range[1]])
-    if not y_range == None:
-        matplotlib.pyplot.gca().set_ylim([y_range[0], y_range[1]])
-    matplotlib.pyplot.plot(x_axis, y_axis, "r.")
-    matplotlib.pyplot.savefig("xy_plot.png")
-    matplotlib.pyplot.cla()
-    matplotlib.pyplot.clf()
-    return "xy_plot.png"
-
-
-
-
