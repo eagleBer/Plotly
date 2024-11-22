@@ -1,0 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Nov 22 10:46:15 2024
+
+@author: danmop
+"""
+
+dash
+plotly
+gunicorn
